@@ -17,7 +17,6 @@ export default class extends React.Component {
   };
 
   addTask = e => {
-    e.preventDefault();
     this.setState({
       input: '',
       tasks: [...this.state.tasks, this.state.input],
@@ -25,41 +24,30 @@ export default class extends React.Component {
     document.getElementById('task').value = '';
   };
 
-  deleteTask = e => {
-    e.preventDefault();
-    const indexOfTaskToDelete = e.target.parentNode.parentNode.getAttribute(
-      'value',
-    );
-    this.setState({
-      tasks: this.state.tasks.filter(
-        (task, index) => index != indexOfTaskToDelete,
-      ),
-    });
+  deleteTask = (indexToDelete) => {
+    console.log(indexToDelete, this.state);
+    this.setState({ tasks: this.state.tasks.filter((value, index) => index !== indexToDelete) });
   };
 
-  saveEditedTask = e => {
-    e.preventDefault();
-    const indexOfTaskToEdit = e.target.parentNode.parentNode.getAttribute(
-      'value',
-    );
-    const newTask = document.getElementById(indexOfTaskToEdit).value;
+  saveEditedTask = (value, index) => {
     const newTasks = this.state.tasks;
-    newTasks[indexOfTaskToEdit] = newTask;
+    newTasks[index] = value;
     this.setState({ tasks: newTasks });
   };
 
   render() {
     return (
-      <div id="todoList">
+      <div>
         <Input setInput={this.setInput} addTask={this.addTask} />
         <table>
           <tbody>
-            {this.state.tasks.map((task, ind) => (
+            {this.state.tasks.map((task, index) => (
               <ListRow
+                key={`id${task}`}
                 task={task}
                 deleteTask={this.deleteTask}
                 saveEditedTask={this.saveEditedTask}
-                index={ind}
+                index={index}
               />
             ))}
           </tbody>
